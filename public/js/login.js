@@ -10,6 +10,16 @@ const inputEmail = document.getElementById('e-mail');
 const inputPassword = document.getElementById('password');
 let userSate;
 
+userName.innerText = `Olá, ${localStorage.getItem('Email')}!`;
+console.log(localStorage.getItem('Email') == null);
+
+if(localStorage.getItem('Email') !== null && userSate !== false) {
+  userName.innerText = `Olá, ${localStorage.getItem('Email')}!`;
+}
+else {
+  userName.innerText = `Olá, usuário!`;
+}
+
 const getUserName = () => {
   let email = inputEmail.value.split('@')[0];
   let password = inputPassword.value;
@@ -52,8 +62,6 @@ form.addEventListener("submit", (e) => {
     alert("Insira um E-mail válido!");
   }
 });
-
-userName.innerText = `Olá, ${localStorage.getItem('Email')}!`;
 
 userExit.addEventListener("click", () => {
   userSate = false;
