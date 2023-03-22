@@ -1,8 +1,3 @@
-window.addEventListener("load", () => {
-  inputEmail.addEventListener('focus', () => console.log("funcionando campo1"));
-  inputPassword.addEventListener('focus', () => console.log("funcionando campo2"));
-});
-
 const userName = document.getElementById("user-name");
 const userExit = document.querySelector(".user__exit");
 const form = document.querySelector(".login__form");
@@ -10,16 +5,20 @@ const inputEmail = document.getElementById('e-mail');
 const inputPassword = document.getElementById('password');
 let userSate;
 
+// Verifica se nome do usuário está no LocalStorage
 userName.innerText = `Olá, ${localStorage.getItem('Email')}!`;
 console.log(localStorage.getItem('Email') == null);
 
 if(localStorage.getItem('Email') !== null && userSate !== false) {
   userName.innerText = `Olá, ${localStorage.getItem('Email')}!`;
+  userExit.style.display = 'block';
 }
 else {
   userName.innerText = `Olá, usuário!`;
+  userExit.style.display = 'none';
 }
 
+// Guarda o nome do suário no LocalStorage
 const getUserName = () => {
   let email = inputEmail.value.split('@')[0];
   let password = inputPassword.value;
@@ -44,6 +43,7 @@ form.addEventListener("submit", (e) => {
 
   const regExp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
+  //Confere se o e-mail é válido e se o campo de senha possui o mínimo de 5 caracteres
   if(regExp.test(inputEmail.value.trim())) {    
     if(inputPassword.value.length > 5) {
       getUserName();
