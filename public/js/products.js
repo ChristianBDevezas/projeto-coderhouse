@@ -2,32 +2,33 @@ const galleryFilter = document.querySelector(".products__categories__links");
 const galleryLinks = document.querySelectorAll(".products__categories__link a");
 const galleryImages = document.querySelectorAll(".products__item");
 
-const displayItems = (e, link) => {
-    e.preventDefault();
-
-    galleryFilter.querySelector(".active").classList.remove("active");
-    link.classList.add("active");
-
-    const filter = link.getAttribute("data-filter");
-
-    galleryImages.forEach((image) => {
-        if(filter === "all"  || image.classList.contains(filter)) {
-            image.style.display = "block";
-        }
-        else {
-            image.style.display = "none";
-        }
-    });
-}
-
 galleryLinks.forEach((link) => {
     link.addEventListener("click", (e) => {
-        displayItems(e, link);
-    });
+        e.preventDefault();
+
+        galleryFilter.querySelector(".active").classList.remove("active");
+        link.classList.add("active");
+
+        const filter = link.getAttribute("data-filter");
+
+        // galleryImages.forEach((image) => {
+        //     if(filter === "all"  || image.classList.contains(filter)) {
+        //         image.style.display = "block";
+        //     }
+        //     else {
+        //         image.style.display = "none";
+        //     }
+        // });
+
+        // exemplo usando operador ternário
+        galleryImages.forEach((image) => {
+            filter === "all" || image.classList.contains(filter) ? image.style.display = "block" : image.style.display = "none";
+        });
+    });    
 });
 
 //*************************************************************************************************************//
-// Criando Objetos com método construtor a partir de uma classe
+// Criando Objeto wine1 com método construtor a partir de uma classe
 class product {
     constructor(name, price, type, year, alcohol) {
         this.name = name;
@@ -40,69 +41,68 @@ class product {
     convertType() {
         let change = this.price.replace(',', '.');
         this.price = Number(change);
-        console.log(`Preço do vinho: ${this.price} | Tipo: ${typeof(this.price)}`);
+        console.log(`Preço do vinho ${this.name} é ${this.price}`);
     }
 }
 
 const wine1 = new product("Barone Montalto", "77,80", "tinto", 2021, "12,50");
-const wine2 = new product("Matetic Corralillo", "75,50", "tinto", 2021, "13,00");
-const wine3 = new product("Vistamar Brisa", "85,80", "seco", 2016, "13,00");
-const wine4 = new product("Rio Flor Douro", "80,50", "seco", 2018, "12,50");
-const wine5 = new product("Estandon Heritage", "92,80", "rose", 2021, "8,00");
-const wine6 = new product("Tramari", "95,50", "rose", 2022, "10,00");
-const wine7 = new product("Victoria Geisse", "75,00", "espumante", 2020, "10,00");
-const wine8 = new product("Gramona Cuvee", "75,80", "espumante", 2017, "12,00");
-const wine9 = new product("Patrick Clerget", "80,50", "tinto", 2022, "13,00");
-const wine10 = new product("Barone Montalto", "95,00", "tinto", 2023, "8,00");
-const wine11 = new product("Vallado Douro", "82,50", "seco", 2018, "12,00");
-const wine12 = new product("Leyda Chardonnay", "95,00", "seco", 2020, "10,00");
-const wine13 = new product("Henri Leblanc", "77,00", "espumante", 2020, "10,00");
-const wine14 = new product("Gramona Imperial", "93,50", "espumante", 2021, "13,00");
-const wine15 = new product("Stardust", "85,50", "rose", 2020, "8,00");
-const wine16 = new product("Lumière", "88,00", "rose", 2023, "12,00");
+
+// Acessando propriedades e armazenando em variáveis por meio da desestruturação 
+const {name, price, type, year, alcohol} = wine1;
+console.log(name, price, type, year, alcohol);
+
+console.log("\n");
 
 //*************************************************************************************************************//
-// Array de produtos
-const productsArray = [
-    wine1, 
-    wine2, 
-    wine3, 
-    wine4, 
-    wine5, 
-    wine6, 
-    wine7, 
-    wine8, 
-    wine9, 
-    wine10, 
-    wine11, 
-    wine12, 
-    wine13, 
-    wine14, 
-    wine15, 
-    wine16
-];
+// Criando mais objetos e utilizando operador SPREAD para replicar os objetos
+const wine2 = new product("Matetic Corralillo", "76,50", "tinto", 2021, "13,00");
+const wine3 = new product("Vistamar Brisa", "85,80", "seco", 2016, "13,00");
+const wine4 = new product("Rio Flor Douro", "80,50", "seco", 2018, "12,50");
 
+// cópia do objeto wine2, sem alterar as propriedades do objeto original
+const wine2Copy = {...wine2};
+console.log(wine2);
+console.log(wine2Copy);
+
+console.log("\n");
+
+// cópia do objeto wine3, alterando o valor da propriedade price, e mantendo inalteradas as propriedades do objeto original
+const wine3Copy = {
+    ...wine3,
+    price: "88,80"
+}
+console.log(wine3);
+console.log(wine3Copy);
+
+console.log("\n");
+
+// cópia do objeto wine4, alterando o valor das propriedades price e year, e sem alterar as propriedades do objeto original
+const wine4Copy = {
+    ...wine4,
+    price: "82,00",
+    year: "2023"
+}
+console.log(wine4);
+console.log(wine4Copy);
+
+console.log("\n");
+
+//*************************************************************************************************************//
+// Array dos 4 produtos(vinhos)
+const productsArray = [wine1, wine2, wine3, wine4,];
+
+// converte o tipo da propriedade price para realizar soma de valores
 for(const item of productsArray) {
-    console.log(item);
     item.convertType();
 }
 
-//*************************************************************************************************************//
-console.log("\n");
+// exemplo de soma de valores(preço dos itens) com o REST parameters
+function somaValues(...prices) {
+	let sum = 0;
+	for(let price of prices) {
+        sum += price;
+    }
 
-// Métodos de busca e filtragem sobre o Array
-// Exemplo para mostrar o nome dos produtos
-const filterName = productsArray.map((item) => item.name);
-console.log(filterName);
-
-// Exemplo para buscar os produtos do tipo "tinto"
-const filterType = productsArray.filter((item) => item.type === "tinto");
-console.log(filterType);
-
-// Exemplo para buscar os produtos com preço superior a R$ 90
-const filterPrice = productsArray.filter((item) => item.price > 90);
-console.log(filterPrice);
-
-// Exemplo para mostrar o valor total dos produtos
-const totalPrice = productsArray.reduce((accumulator, item) => accumulator + item.price, 0);
-console.log(`Valor total dos produtos: R$ ${totalPrice}`);
+	return `O valor total dos vinhos é ${sum.toFixed(2)}`;
+}
+console.log(somaValues(wine1.price, wine2.price, wine3.price, wine4.price));
