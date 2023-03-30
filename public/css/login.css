@@ -79,6 +79,33 @@ main {
     color: var(--cor-branca);
 }
 
+/*Sweet Alert*/
+.swal-overlay {
+    background-color: rgba(0, 0, 0, .5);
+}
+
+.swal-modal {
+    border: 3px solid var(--cor-preta);
+    border-radius: 7px;
+}
+
+.swal-icon {
+    background-color: #d5d5d8;
+}
+
+.swal-title {
+    font-size: 2rem;
+    margin-top: -1rem;
+}
+
+.swal-button {
+    background-color: #f55234;
+    transition: background-color .5s;
+}
+.swal-button:hover {
+    background-color: var(--cor-vinho-verde) !important;
+}
+
 /*Media Queries*/
 @media(max-width: 500px) {
     .user {

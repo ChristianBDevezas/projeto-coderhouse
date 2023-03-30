@@ -1,3 +1,42 @@
+/**MAIN PRODUCT**/
+#product {
+    position: relative;
+}
+
+#promo-btn {
+    position: absolute;
+    top: 10rem;
+    left: 2rem;
+    /* z-index: 100; */
+    font-family: 'Montserrat', sans-serif;
+    padding: 5px;
+    background-color: var(--cor-vinho-verde);
+    border: 1px solid var(--cor-preta);
+    border-radius: 3px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: color .5s;
+}
+
+#promo-btn:hover {
+    color: var(--cor-branca);
+}
+
+/*Toastify*/
+.toastify {
+    position: absolute;
+    top: 14rem !important;
+    left: 2rem;
+    font-size: 1.3rem;
+    width: 175px;
+    padding: 5px 5px 5px 7px;
+    background-color: var(--cor-vinho-verde);
+    color: var(--cor-branca);
+    border: 1px solid black;
+    border-radius: 5px;
+    z-index: 2;
+}
+
 /**SECTION PRODUCT**/
 .product {
     display: grid;

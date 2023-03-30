@@ -27,6 +27,7 @@ const getUserName = () => {
   localStorage.setItem('Password', password);
 }
 
+// Verifica status de ussuário
 const checkState = (userSate) => {
   if(userSate == true) {
     userName.innerText = `Olá, ${localStorage.getItem('Email')}!`;
@@ -43,7 +44,7 @@ form.addEventListener("submit", (e) => {
 
   const regExp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-  //Confere se o e-mail é válido e se o campo de senha possui o mínimo de 5 caracteres
+  //Confere se o e-mail é válido e se o campo de senha possui o mínimo de 6 caracteres
   if(regExp.test(inputEmail.value.trim())) {    
     if(inputPassword.value.length > 5) {
       getUserName();
@@ -55,11 +56,27 @@ form.addEventListener("submit", (e) => {
       checkState(userSate);
     }    
     else {
-      alert("Campo Senha precisa ter no mínimo 6 caracteres!");
+      // alert("Campo Senha precisa ter no mínimo 6 caracteres!");
+
+      //Biblioteca Sweet Alert
+      swal({
+        title: 'Senha',
+        text: 'Campo Senha precisa ter no mínimo 6 caracteres!',
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
     }
   }
   else {
-    alert("Insira um E-mail válido!");
+    // alert("Insira um E-mail válido!");
+
+    //Biblioteca Sweet Alert
+    swal({
+      title: 'E-mail',
+      text: 'Insira um E-mail válido!',
+      icon: 'error',
+      confirmButtonText: 'OK'
+    });
   }
 });
 
