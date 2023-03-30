@@ -59,6 +59,7 @@ main {
     font-weight: 550;
     margin-bottom: .4rem;
 }
+
 .login__inputs label:nth-child(3) {
     margin-top: 2rem;
 }
@@ -94,8 +95,14 @@ main {
 }
 
 .swal-title {
+    color: var(--cor-preta);
     font-size: 2rem;
     margin-top: -1rem;
+}
+
+.swal-text {
+    color: var(--cor-preta);
+    font-weight: bold;
 }
 
 .swal-button {
