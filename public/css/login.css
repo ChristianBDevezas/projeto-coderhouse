@@ -95,13 +95,13 @@ main {
 }
 
 .swal-title {
-    color: var(--cor-preta);
+    color: #3d3d3d;
     font-size: 2rem;
     margin-top: -1rem;
 }
 
 .swal-text {
-    color: var(--cor-preta);
+    color: #3d3d3d;
     font-weight: bold;
 }
 
