@@ -45,7 +45,13 @@
             <div class="hamburger__line"></div>
         </div>
 
-        <!--Login/Compras-->
+        <!--User Name-->
+        <div class="user">
+            <h2 id="user-name"></h2>
+            <button class="user__exit">Sair</button>
+        </div>
+
+        <!--Login/Shopping-->
         <div class="icons">
             <a href="login.html">
                 <i class="fa-solid fa-user" id="user-icon" title="Login"></i>
@@ -109,6 +115,7 @@
                 <!-- <button class="cart__resume__back" onclick="window.location.href='/product-selected.html'">
                     Voltar para produtos
                 </button> -->
+
                 <a href="product-selected.html">
                     <button class="cart__resume__back">Voltar para o produto</button>
                 </a>                
@@ -174,11 +181,14 @@
     <!--end FOOTER-->
 
     <!--JAVASCRIPT-->
-    <!--Main-->
-    <script src="public/js/main.js"></script>
+    <!--User Name-->
+    <script src="public/js/user-state.js"></script>
 
     <!--Shop-->
     <script src="public/js/shop.js"></script>
+
+    <!--Main-->
+    <script src="public/js/main.js"></script>
     <!--end JAVASCRIPT-->
 </body>
 </html>

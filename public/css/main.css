@@ -154,6 +154,26 @@ img {
     margin-right: 1.6rem;
 }
 
+/*User name*/
+.user {
+    position: absolute;
+    right: 21rem;
+    top: 32px;
+    color: var(--cor-branca);
+}
+
+.user__exit {
+    margin-top: 5px;
+    font-size: 1.2rem;
+    padding: 2px 5px;
+    background-color: var(--cor-branca);
+    border: 1px solid var(--cor-preta);
+    color: var(--cor-vinho-escuro);
+    border-radius: 3px;
+    cursor: pointer;
+    display: none;
+}
+
 /**MAIN**/
 main {
     padding-top: 8rem;
@@ -457,6 +477,14 @@ main {
         top: 50%;
         left: 52%;
         transform: translate(-50%, -50%);
+    }
+
+    
+    .user {
+        right: 50%;
+        transform: translate(50%);
+        top: 60px;
+        font-size: .9rem;
     }
 
     .link-top {
