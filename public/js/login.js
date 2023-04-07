@@ -49,17 +49,25 @@ const checkIfLogged = () => {
   }
 }
 
+const clearInputFields = () => {
+  inputEmail.value = '';
+  inputPassword.value = '';
+}
+
 form.addEventListener("submit", (e) => {
   e.preventDefault();
 
   // Informa que usuário já está logado
   if(checkIfLogged()) {
+    //Biblioteca Sweet Alert
     swal({
       title: 'Logoff',
       text: 'Precisa fazer logoff primeiro!',
       icon: 'error',
       confirmButtonText: 'OK'
-    });    
+    });
+
+    clearInputFields();
   }
   else {
     const regExp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -68,8 +76,7 @@ form.addEventListener("submit", (e) => {
     if(regExp.test(inputEmail.value.trim())) {    
       if(inputPassword.value.length > 5) {
         getUserName();
-        inputEmail.value = '';
-        inputPassword.value = '';
+        clearInputFields();
     
         userSate = true;
         localStorage.setItem('UserState', userSate);
