@@ -106,3 +106,9 @@ function somaValues(...prices) {
 	return `O valor total dos vinhos é ${sum.toFixed(2)}`;
 }
 console.log(somaValues(wine1.price, wine2.price, wine3.price, wine4.price));
+
+//*************************************************************************************************************//
+// Fetch do arquivo "data.json"
+// fetch("/data.json")
+//     .then((resp) => resp.json())
+//     .then((data) => console.log(data));
