@@ -21,9 +21,11 @@ else {
 // Guarda o nome do usuário no LocalStorage
 const getUserName = () => {
   let email = inputEmail.value.split('@')[0];
+  let emailCapitalize = email.charAt(0).toUpperCase() + email.slice(1);
   let password = inputPassword.value;
-
-  localStorage.setItem('Email', email);
+  
+  // localStorage.setItem('Email', email);
+  localStorage.setItem('Email', emailCapitalize);
   localStorage.setItem('Password', password);
 }
 
@@ -65,7 +67,7 @@ form.addEventListener("submit", (e) => {
       text: 'Precisa fazer logoff primeiro!',
       icon: 'error',
       // confirmButtonText: 'OK'
-      // switched to "button" because "confirmButtonText" has been deprecated
+      //switched to "button" because "confirmButtonText" has been deprecated
       button: 'OK'
     });
 
@@ -89,7 +91,6 @@ form.addEventListener("submit", (e) => {
         userExit.style.display = 'block';
       }    
       else {
-        //Biblioteca Sweet Alert
         swal({
           title: 'Senha',
           text: 'Campo Senha precisa ter no mínimo 6 caracteres!',
@@ -100,7 +101,6 @@ form.addEventListener("submit", (e) => {
       }
     }
     else {
-      //Biblioteca Sweet Alert
       swal({
         title: 'E-mail',
         text: 'Insira um E-mail válido!',
