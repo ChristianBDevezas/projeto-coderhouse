@@ -2,10 +2,10 @@ const userName = document.getElementById("user-name");
 const userExit = document.querySelector(".user__exit");
 let userSate;
 
-// Verifica se nome do usuário está no LocalStorage
 userName.innerText = `Olá, ${localStorage.getItem('Email')}!`;
 console.log(localStorage.getItem('Email') == null);
 
+// Verifica se nome do usuário está no LocalStorage
 if(localStorage.getItem('Email') !== null && userSate !== false) {
   userName.innerText = `Olá, ${localStorage.getItem('Email')}!`;
   userExit.style.display = 'block';

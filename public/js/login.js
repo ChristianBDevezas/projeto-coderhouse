@@ -18,7 +18,7 @@ else {
   userExit.style.display = 'none';
 }
 
-// Guarda o nome do suário no LocalStorage
+// Guarda o nome do usuário no LocalStorage
 const getUserName = () => {
   let email = inputEmail.value.split('@')[0];
   let password = inputPassword.value;
@@ -28,7 +28,7 @@ const getUserName = () => {
 }
 
 // Verifica status de usuário
-const checkState = (userSate) => {
+const checkState = (userSate) => {  
   if(userSate == true) {
     userName.innerText = `Olá, ${localStorage.getItem('Email')}!`;
     userExit.style.display = 'block';
@@ -41,7 +41,7 @@ const checkState = (userSate) => {
 
 // Verifica se o usuário já está logado
 const checkIfLogged = () => {
-  if(localStorage.getItem('Email')) {
+  if(localStorage.getItem('Email') !== null) {
     return true;
   }
   else {
@@ -64,7 +64,9 @@ form.addEventListener("submit", (e) => {
       title: 'Logoff',
       text: 'Precisa fazer logoff primeiro!',
       icon: 'error',
-      confirmButtonText: 'OK'
+      // confirmButtonText: 'OK'
+      // switched to "button" because "confirmButtonText" has been deprecated
+      button: 'OK'
     });
 
     clearInputFields();
@@ -75,12 +77,16 @@ form.addEventListener("submit", (e) => {
     //Confere se o e-mail é válido e se o campo de senha possui o mínimo de 6 caracteres
     if(regExp.test(inputEmail.value.trim())) {    
       if(inputPassword.value.length > 5) {
-        getUserName();
-        clearInputFields();
-    
         userSate = true;
         localStorage.setItem('UserState', userSate);
+        
+        getUserName();
+        clearInputFields();
         checkState(userSate);
+
+        // garante que o nome de usuário e botão "sair" sejam mostrados após o usuário fazer novo login
+        userName.style.display = 'block';
+        userExit.style.display = 'block';
       }    
       else {
         //Biblioteca Sweet Alert
@@ -88,7 +94,8 @@ form.addEventListener("submit", (e) => {
           title: 'Senha',
           text: 'Campo Senha precisa ter no mínimo 6 caracteres!',
           icon: 'error',
-          confirmButtonText: 'OK'
+          // confirmButtonText: 'OK'
+          button: 'OK'
         });
       }
     }
@@ -98,15 +105,16 @@ form.addEventListener("submit", (e) => {
         title: 'E-mail',
         text: 'Insira um E-mail válido!',
         icon: 'error',
-        confirmButtonText: 'OK'
+        // confirmButtonText: 'OK'
+        button: 'OK'
       });
     }
-  }  
+  }
 });
 
 userExit.addEventListener("click", () => {
   userSate = false;
-  localStorage.setItem('UserState', userSate);
+  // localStorage.setItem('UserState', userSate);
   checkState(userSate);
   localStorage.clear();
 });
