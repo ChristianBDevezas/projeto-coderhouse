@@ -158,20 +158,25 @@ img {
 .user {
     position: absolute;
     right: 21rem;
-    top: 32px;
+    top: 29.5px;
     color: var(--cor-branca);
 }
 
 .user__exit {
     margin-top: 5px;
     font-size: 1.2rem;
-    padding: 2px 5px;
+    padding: 2.5px 6px;
     background-color: var(--cor-branca);
     border: 1px solid var(--cor-preta);
     color: var(--cor-vinho-escuro);
     border-radius: 3px;
     cursor: pointer;
     display: none;
+    transition: all .5s;
+}
+.user__exit:hover {
+    background-color: var(--cor-rosa);
+    color: var(--cor-branca);
 }
 
 /**MAIN**/
@@ -482,9 +487,15 @@ main {
     
     .user {
         right: 50%;
+        top: 58px;
         transform: translate(50%);
-        top: 60px;
         font-size: .9rem;
+    }
+
+    .user__exit {
+        position: absolute;
+        top: -8px;
+        right: -42px;
     }
 
     .link-top {
