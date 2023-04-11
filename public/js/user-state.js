@@ -11,7 +11,7 @@ if(localStorage.getItem('Email') !== null && userSate !== false) {
   userExit.style.display = 'block';
 }
 else {
-  userName.innerText = `Olá, usuário!`;
+  userName.innerText = `Seja bem-vindo!`;
   userExit.style.display = 'none';
 }
 

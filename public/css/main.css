@@ -157,7 +157,7 @@ img {
 /*User name*/
 .user {
     position: absolute;
-    right: 21rem;
+    right: 25rem;
     top: 29.5px;
     color: var(--cor-branca);
 }
@@ -366,6 +366,12 @@ main {
 }
 
 /**MEDIA QUERIES**/
+@media(max-width: 1000px) {
+    .user {
+        right: 21%;
+    }
+}
+
 @media(max-width: 800px) {
     .logo__image img {
         margin: 4px 0 0 0px;
@@ -433,6 +439,7 @@ main {
     .hamburger__line:last-child {
         margin-bottom: 0;
     }
+
     /*Change Hamburger Menu*/
     .header.open-menu .hamburger__line:first-child {
         transform: rotate(-45deg) translateY(-2px);
@@ -447,6 +454,11 @@ main {
     .icons {
         align-self: center;
         margin-right: 5.5rem;        
+    }
+
+    .user {
+        right: 50%;
+        transform: translate(50%);
     }
 
     .footer__top__map,
@@ -483,12 +495,9 @@ main {
         left: 52%;
         transform: translate(-50%, -50%);
     }
-
     
     .user {
-        right: 50%;
         top: 58px;
-        transform: translate(50%);
         font-size: .9rem;
     }
 
