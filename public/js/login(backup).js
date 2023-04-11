@@ -51,19 +51,6 @@ const checkIfLogged = () => {
   }
 }
 
-// Redireciona para a página de produtos após fazer o Login
-const redirectIfLogged = () => {
-  if(checkIfLogged()) {  
-    // window.location.href="http://localhost/projeto-coderhouse-main/";
-    // const location = window.location;
-    // const folderDirectory = 'projeto-coderhouse';
-    // const destinationPage = `${location.protocol}/${location.hostname}/${folderDirectory}/products.html`;
-    // window.location.href = destinationPage;
-    window.location.href = 'products.html';
-  }
-}
-redirectIfLogged();
-
 const clearInputFields = () => {
   inputEmail.value = '';
   inputPassword.value = '';
@@ -71,21 +58,20 @@ const clearInputFields = () => {
 
 form.addEventListener("submit", (e) => {
   e.preventDefault();
-  // redirectIfLogged();
 
   // Informa que usuário já está logado
   if(checkIfLogged()) {
     //Biblioteca Sweet Alert
-    // swal({
-    //   title: 'Logoff',
-    //   text: 'Precisa fazer logoff primeiro!',
-    //   icon: 'error',
-    //   // confirmButtonText: 'OK'
-    //   //switched to "button" because "confirmButtonText" has been deprecated
-    //   button: 'OK'
-    // });
+    swal({
+      title: 'Logoff',
+      text: 'Precisa fazer logoff primeiro!',
+      icon: 'error',
+      // confirmButtonText: 'OK'
+      //switched to "button" because "confirmButtonText" has been deprecated
+      button: 'OK'
+    });
 
-    // clearInputFields();
+    clearInputFields();
   }
   else {
     const regExp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -103,14 +89,13 @@ form.addEventListener("submit", (e) => {
         // garante que o nome de usuário e botão "sair" sejam mostrados após o usuário fazer novo login
         userName.style.display = 'block';
         userExit.style.display = 'block';
-
-        redirectIfLogged();
       }    
       else {
         swal({
           title: 'Senha',
           text: 'Campo Senha precisa ter no mínimo 6 caracteres!',
           icon: 'error',
+          // confirmButtonText: 'OK'
           button: 'OK'
         });
       }
@@ -120,6 +105,7 @@ form.addEventListener("submit", (e) => {
         title: 'E-mail',
         text: 'Insira um E-mail válido!',
         icon: 'error',
+        // confirmButtonText: 'OK'
         button: 'OK'
       });
     }
@@ -128,6 +114,7 @@ form.addEventListener("submit", (e) => {
 
 userExit.addEventListener("click", () => {
   userState = false;
+  // localStorage.setItem('UserState', userState);
   checkState(userState);
   localStorage.clear();
 });
