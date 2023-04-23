@@ -18,6 +18,7 @@
 
     <!--CSS-->
     <link rel="stylesheet" href="public/css/product-selected.css">
+    <link rel="stylesheet" href="public/css/cart.css">
     <link rel="stylesheet" href="public/css/main.css">
 </head>
 <body>
@@ -68,34 +69,16 @@
     <main id="product">
         <section class="product">
             <figure class="product__image">
-                <img src="public/img/bottles/1-barone-montalto.png" alt="Vinho">
+                <!-- <img src="public/img/bottles/1-barone-montalto.png" alt="Vinho"> -->
             </figure>
 
             <article class="product__description">
-                <h2 class="product__title">
-                    <span class="product__title__value">Barone Montalto</span>
-                </h2>
-
-                <h2 class="product__price">Preço:
-                    <span class="product__price__value">R$ 77,80</span>
-                </h2>
-
-                <h2 class="product__type">Tipo de Vinho:
-                    <span class="product__type__value">Seco</span>
-                </h2>
-                    
-                <h2 class="product__vintage">Ano Safra:
-                    <span class="product__vintage__value">2021</span>
-                </h2>
-
-                <h2 class="product__alcohol">Percentual Alcoólico:
-                    <span class="product__alcohol__value">12,50</span>
-                </h2>
+                <!--Content of this article is located in product-selected.js file-->
             </article>
-
-            <a href="products.html" class="product__btn back">Voltar para produtos</a>
-
-            <a href="cart.html" class="product__btn cart">Adicionar ao carrinho</a>
+            
+            <!--It loads dinamically via JS-->
+            <!-- <a href="products.html" class="product__btn back">Voltar para produtos</a> -->
+            <!-- <a href="cart.html" class="product__btn cart" cart-button="">Adicionar ao carrinho</a> -->            
         </section>
 
         <!--Button Promotion-->
@@ -117,6 +100,7 @@
                 <div class="footer__details__contact">
                     <h3>Contato</h3>
                     <span>contato@loja.winehouse.com.br</span>
+                    
                     <div class="footer__contact__whatsapp">                        
                         <span class="pulse-phone">
                             <i class="fab fa-whatsapp" aria-hidden="true"></i>
@@ -157,17 +141,24 @@
     <!--end FOOTER-->
 
     <!--JAVASCRIPT-->
+    <script src="public/js/classes/model/Product.js" defer></script>
+    <script src="public/js/data/product-list.js" defer></script>
+    <script src="public/js/functions.js" defer></script>
+
     <!--CDN Toastify-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.6.1/toastify.js" integrity="sha512-MnKz2SbnWiXJ/e0lSfSzjaz9JjJXQNb2iykcZkEY2WOzgJIWVqJBFIIPidlCjak0iTH2bt2u1fHQ4pvKvBYy6Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastify-js/1.6.1/toastify.js" integrity="sha512-MnKz2SbnWiXJ/e0lSfSzjaz9JjJXQNb2iykcZkEY2WOzgJIWVqJBFIIPidlCjak0iTH2bt2u1fHQ4pvKvBYy6Q==" crossorigin="anonymous" referrerpolicy="no-referrer" defer></script>
+
+    <!--CDN Sweet Alert-->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js" defer></script>
 
     <!--User Name-->
-    <script src="public/js/user-state.js"></script>
+    <script src="public/js/user-state.js" defer></script>
     
     <!--Product Selected-->
-    <script src="public/js/product-selected.js"></script>
+    <script src="public/js/product-selected.js" defer></script>
 
     <!--Main-->
-    <script src="public/js/main.js"></script>
+    <script src="public/js/main.js" defer></script>
     <!--end JAVASCRIPT-->
 </body>
 </html>

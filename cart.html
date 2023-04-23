@@ -68,8 +68,11 @@
     <main id="cart">
         <section class="cart">
             <h1 class="cart__title">Carrinho de Compras</h1>
+            <div class="cart_product_list">
+                <!--Content of this div is located in shop.js file-->
+            </div>
 
-            <article class="cart__description">
+            <!-- <article class="cart__description">
                 <figure class="cart__description__image">
                     <img src="public/img/bottles/1-barone-montalto.png" alt="Vinho">
                 </figure>
@@ -93,9 +96,9 @@
                         <span class="cart__price_total">77,80</span>
                     </h2>
                 </div>
-            </article>
+            </article> -->
 
-            <article class="cart__buttons">
+            <!-- <article class="cart__buttons">
                 <button class="cart__buttons__subtract">
                     <i class="fa-solid fa-minus fa-2x"></i>
                 </button>
@@ -109,19 +112,25 @@
                 <button class="cart__buttons__remove">
                     <i class="fa-solid fa-trash fa-2x"></i>
                 </button>
-            </article>
+            </article> -->
 
             <article class="cart__resume">
                 <!-- <button class="cart__resume__back" onclick="window.location.href='/product-selected.html'">
                     Voltar para produtos
                 </button> -->
 
-                <a href="product-selected.html">
+                <!-- <a href="products.html">
                     <button class="cart__resume__back">Voltar para o produto</button>
-                </a>                
+                </a> -->
 
-                <button class="cart__resume__final">Finalizar a compra</button>
+                <!-- <a href="index.html">
+                    <button class="cart__resume__final">Finalizar a compra</button>
+                </a> -->
             </article>
+
+            <div class="cart__modal">
+                <h2 class="cart__modal__message">Agradecemos pela compra!</h2>
+            </div>
         </section>
 
         <!--Link to Top-->
@@ -181,14 +190,18 @@
     <!--end FOOTER-->
 
     <!--JAVASCRIPT-->
-    <!--User Name-->
-    <script src="public/js/user-state.js"></script>
+    <script src="public/js/classes/model/Product.js" defer></script>
+    <script src="public/js/data/product-list.js" defer></script>
+    <script src="public/js/functions.js" defer></script>
 
-    <!--Shop-->
-    <script src="public/js/shop.js"></script>
+    <!--User Name-->
+    <script src="public/js/user-state.js" defer></script>
+
+    <!--Cart-->
+    <script src="public/js/shop.js" defer></script>
 
     <!--Main-->
-    <script src="public/js/main.js"></script>
+    <script src="public/js/main.js" defer></script>
     <!--end JAVASCRIPT-->
 </body>
 </html>

@@ -7,7 +7,6 @@
     position: absolute;
     top: 10rem;
     left: 2rem;
-    /* z-index: 100; */
     font-family: 'Montserrat', sans-serif;
     padding: 5px;
     background-color: var(--cor-vinho-verde);
@@ -50,7 +49,7 @@
 }
 
 .product__image {
-    margin-right: .5rem;
+    margin-right: 3rem;  /*before: .5rem*/
     justify-self: right;
 }
 
@@ -93,4 +92,42 @@
 .product__btn.cart {
     justify-self: left;
     background-color: var(--cor-vinho-verde);
+}
+
+/*It removes the green color of icon*/
+#cart-icon {
+    color: var(--cor-branca) !important;
+}
+
+/*Alert Message*/
+.swal-overlay {
+    background-color: rgba(0, 0, 0, .5);
+}
+
+.swal-modal {
+    border: 3px solid var(--cor-preta);
+    border-radius: 7px;
+}
+
+.swal-icon {
+    background-color: #f1f1f1;
+}
+
+.swal-title {
+    color: #3d3d3d;
+    font-size: 2rem;
+    margin-top: -1rem;
+}
+
+.swal-text {
+    color: #3d3d3d;
+    font-weight: bold;
+}
+
+.swal-button {
+    background-color: #f8a202;
+    transition: background-color .5s;
+}
+.swal-button:hover {
+    background-color: var(--cor-vinho-verde) !important;
 }

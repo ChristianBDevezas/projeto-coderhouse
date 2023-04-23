@@ -8,6 +8,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    position: relative;
 }
 
 .cart__title {
@@ -18,7 +19,7 @@
 
 .cart__description {
     display: flex;
-    align-items: center;
+    align-items: center;    
 }
 
 .cart__description__image {
@@ -30,8 +31,12 @@
     width: 70px;
 }
 
+.cart__description__text {
+    margin-top: -2rem;
+}
+
 .cart__description__text h2 {
-    margin-bottom: 1.8rem;
+    margin-bottom: 2.2rem;
 }
 
 .cart__subtitle {
@@ -53,7 +58,7 @@
     padding: .35rem .5rem;
     transform: scale(.7);
     background: none;
-    border: 2px solid black;
+    border: 2px solid var(--cor-preta);
     border-radius: 5px;
 }
 
@@ -73,8 +78,69 @@
     color: var(--cor-vinho-escuro);
 }
 
+/*>Exclusively for buttons of cart page<*/
+.buttons-cart {
+    padding: .35rem .5rem;
+    transform: scale(.7);
+    background: none;
+    border: 2px solid var(--cor-preta);
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 1rem;
+    margin-left: 2rem;
+}
+.buttons-cart:last-child {
+    margin-left: 0 !important;
+}
+
+.total-value {
+    font-size: 1.5rem;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1.3rem;
+    font-weight: bold;
+}
+
+.buttons-cart2 {
+    margin-top: -4.5em;
+}
+/*>********************************<*/
+
+/*Cart Modal*/
+.cart__modal {
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    z-index: 10;
+    width: 210px;
+    height: 70px;
+    transform: translate(-50%, -50%);
+    background-color: var(--cor-vinho-verde);
+    color: var(--cor-branca);
+    border-radius: 5px;
+    border: 2px solid var(--cor-preta);
+    display: none;
+    /* transition: all .5s; */
+}
+
+.cart__modal__message {
+    text-align: center;
+}
+
+@keyframes  show-modal {
+    0% {opacity: 0;}
+    100% {opacity: 1;}
+}
+.cart__modal.show-modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: show-modal .5s;
+}
+
+/*Cart Resume*/
 .cart__resume {
-    margin: 2rem 0;    
+    margin: 2rem 0;
 }
 
 .cart__resume button {
@@ -118,13 +184,4 @@
     .cart__resume__back {
         margin: 0rem 0 1rem 0rem;
     }
-}
-
-/*Cart2*/
-.footer__top__map img {
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
-    border-radius: 12px;
-    border: 3px solid var(--cor-dourada);
 }
