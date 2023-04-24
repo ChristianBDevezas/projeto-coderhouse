@@ -4,9 +4,14 @@ const DIRECTORY_IMAGE_PATH = `public/img/`;
 const SHOP_RESUME_TAG = document.querySelector("section.cart .cart__resume");
 const PRODUCT_LIST_TAG = document.querySelector("section.cart .cart_product_list");
 
-// controla a mensagem final
-let totalValue = `${getTotalValueFromCart(true)}`;
-console.log(totalValue);
+// recebe o valor total de compras atualizado para controlar a mensagem final
+let totalShopAmount = `${getTotalValueFromCart(true)}`;
+console.log(totalShopAmount);
+
+// armazena o valor total de compras no LocalStorage
+// localStorage.setItem('TotalShopValue', totalShopAmount);
+// let totalShopAmountStorage = localStorage.getItem('TotalShopValue');
+// console.log(totalShopAmountStorage);
 
 if(SHOP_RESUME_TAG instanceof HTMLElement) {
     const BUTTON_BACK = document.createElement("a");
@@ -36,7 +41,8 @@ if(SHOP_RESUME_TAG instanceof HTMLElement) {
     });
     
     BUTTON_END_SHOP.addEventListener("click", () => {
-        if(totalValue.replace(',', '.') > 10) {
+        // compara o valor total de compras para mostrar a mensagem final
+        if(totalShopAmount.replace(',', '.') > 10) {
             CART_MODAL.classList.add("show-modal");
 
             setTimeout(() => {
@@ -150,7 +156,7 @@ function productSelectedMakeSubtractButton(span, ID, cartTotalValueTag) {
     cartTotalValueTag.classList.add("total-value");
     cartTotalValueTag.innerHTML = `Valor total da compra: R$ ${getTotalValueFromCart(true)}`;
 
-    return productSelectedMakeCartButton("cart__buttons__subtract", "fa-solid fa-minus fa-2x", (event) => {
+    return productSelectedMakeCartButton("cart__buttons__subtract", "fa-solid fa-minus fa-2x", () => {
         console.log("subtract");
         span.quantity--;
         span.quantity = span.quantity < 0 ? 0 : span.quantity;
@@ -161,9 +167,9 @@ function productSelectedMakeSubtractButton(span, ID, cartTotalValueTag) {
 
         cartTotalValueTag.innerHTML = `Valor total da compra: R$ ${getTotalValueFromCart(true)}`;
 
-        // controla a mensagem final
-        totalValue = `${getTotalValueFromCart(true)}`;
-        console.log(totalValue);
+        // armazena o valor total de compras atualizado para controlar a mensagem final
+        totalShopAmount = `${getTotalValueFromCart(true)}`;
+        console.log(totalShopAmount);
     });
 }
 
@@ -172,7 +178,7 @@ function productSelectedMakeAdditionButton(span, ID, cartTotalValueTag) {
         throw new Error("É necessário uma tag html");
     }
 
-    return productSelectedMakeCartButton("cart__buttons__add", "fa-solid fa-plus fa-2x", (event) => {
+    return productSelectedMakeCartButton("cart__buttons__add", "fa-solid fa-plus fa-2x", () => {
         console.log("adition");
         // span.quantity++;
         span.innerHTML = ++span.quantity;
@@ -181,8 +187,8 @@ function productSelectedMakeAdditionButton(span, ID, cartTotalValueTag) {
 
         cartTotalValueTag.innerHTML = `Valor total da compra: R$ ${getTotalValueFromCart(true)}`;
 
-        // controla a mensagem final
-        totalValue = `${getTotalValueFromCart(true)}`;
-        console.log(totalValue);
+        // armazena o valor total de compras atualizado para controlar a mensagem final
+        totalShopAmount = `${getTotalValueFromCart(true)}`;
+        console.log(totalShopAmount);
     });
 }
