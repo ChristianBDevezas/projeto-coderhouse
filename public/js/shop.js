@@ -4,6 +4,10 @@ const DIRECTORY_IMAGE_PATH = `public/img/`;
 const SHOP_RESUME_TAG = document.querySelector("section.cart .cart__resume");
 const PRODUCT_LIST_TAG = document.querySelector("section.cart .cart_product_list");
 
+// controla a mensagem final
+let totalValue = `${getTotalValueFromCart(true)}`;
+console.log(totalValue);
+
 if(SHOP_RESUME_TAG instanceof HTMLElement) {
     const BUTTON_BACK = document.createElement("a");
     SHOP_RESUME_TAG.insertAdjacentElement("beforeend", BUTTON_BACK);
@@ -30,18 +34,20 @@ if(SHOP_RESUME_TAG instanceof HTMLElement) {
             window.location = `products.html`;
         }
     });
-
+    
     BUTTON_END_SHOP.addEventListener("click", () => {
-        CART_MODAL.classList.add("show-modal");
+        if(totalValue.replace(',', '.') > 10) {
+            CART_MODAL.classList.add("show-modal");
 
-        setTimeout(() => {
-            CART_MODAL.classList.remove("show-modal");
-        }, 3500);
+            setTimeout(() => {
+                CART_MODAL.classList.remove("show-modal");
+            }, 3500);
 
-        setTimeout(() => {
-            BUTTON_END_SHOP.setAttribute("href", "index.html");
-            window.location = `index.html`;
-        }, 3700);
+            setTimeout(() => {
+                BUTTON_END_SHOP.setAttribute("href", "index.html");
+                window.location = `index.html`;
+            }, 3700);
+        }
     });
 }
 
@@ -154,6 +160,10 @@ function productSelectedMakeSubtractButton(span, ID, cartTotalValueTag) {
         setShopItemInCart(ID, span.quantity);
 
         cartTotalValueTag.innerHTML = `Valor total da compra: R$ ${getTotalValueFromCart(true)}`;
+
+        // controla a mensagem final
+        totalValue = `${getTotalValueFromCart(true)}`;
+        console.log(totalValue);
     });
 }
 
@@ -170,5 +180,9 @@ function productSelectedMakeAdditionButton(span, ID, cartTotalValueTag) {
         setShopItemInCart(ID, span.quantity);
 
         cartTotalValueTag.innerHTML = `Valor total da compra: R$ ${getTotalValueFromCart(true)}`;
+
+        // controla a mensagem final
+        totalValue = `${getTotalValueFromCart(true)}`;
+        console.log(totalValue);
     });
 }
