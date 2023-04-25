@@ -13,6 +13,7 @@ console.log(totalShopAmount);
 // let totalShopAmountStorage = localStorage.getItem('TotalShopValue');
 // console.log(totalShopAmountStorage);
 
+// insere botões dinamicamente na página
 if(SHOP_RESUME_TAG instanceof HTMLElement) {
     const BUTTON_BACK = document.createElement("a");
     SHOP_RESUME_TAG.insertAdjacentElement("beforeend", BUTTON_BACK);
@@ -54,6 +55,16 @@ if(SHOP_RESUME_TAG instanceof HTMLElement) {
                 window.location = `index.html`;
             }, 3700);
         }
+        else {
+            swal({
+                title: 'Quantidade',
+                text: 'Precisa adicionar ao menos 1 unidade!',
+                icon: 'warning',
+                // confirmButtonText: 'OK'
+                //switched to "button" because "confirmButtonText" has been deprecated
+                button: 'OK'
+              });
+        }
     });
 }
 
@@ -66,8 +77,11 @@ if(SHOP_RESUME_TAG instanceof HTMLElement) {
 
 shopMakeListFromCart(PRODUCT_LIST_TAG, CART_TOTAL_VALUE_TAG);
 
+// mostra as características do produto selecionado
 function shopMakeListFromCart(container, cartTotalValueTag) {
     const SHOP_CART_ITEMS = getShopCartItems();
+
+    cartTotalValueTag.innerHTML = ``;
 
     if(container instanceof HTMLElement) {
         for(let PRODUCT_ID in SHOP_CART_ITEMS) {
@@ -126,6 +140,7 @@ function shopMakeListFromCart(container, cartTotalValueTag) {
     }
 }
 
+// retorna a quantidade de produtos
 function productSelectedMakeSpanQuantity(quantity = 0) {
     const SPAN = document.createElement("span");
     SPAN.classList.add("cart__buttons__quantity");
@@ -135,6 +150,7 @@ function productSelectedMakeSpanQuantity(quantity = 0) {
     return SPAN;
 }
 
+// adiciona a classe e controla o evento dos botões
 function productSelectedMakeCartButton(buttonClass = "", iconClass = "", buttonClickEvent = (e) => {}) {
     // buttonClass = buttonClass || '';
     
@@ -148,6 +164,7 @@ function productSelectedMakeCartButton(buttonClass = "", iconClass = "", buttonC
     return BUTTON;
 }
 
+// controla a quantidade de produtos subtraídos
 function productSelectedMakeSubtractButton(span, ID, cartTotalValueTag) {
     if(span instanceof HTMLElement === false) {
         throw new Error("É necessário uma tag html");
@@ -173,6 +190,7 @@ function productSelectedMakeSubtractButton(span, ID, cartTotalValueTag) {
     });
 }
 
+// controla a quantidade de produtos adicionados
 function productSelectedMakeAdditionButton(span, ID, cartTotalValueTag) {
     if(span instanceof HTMLElement === false) {
         throw new Error("É necessário uma tag html");

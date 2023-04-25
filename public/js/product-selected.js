@@ -12,6 +12,7 @@ promoBtn.addEventListener("click", () => {
 const DIRECTORY_PATH = `public/img/`;
 const PRODUCT_SELECTED_IMAGE = document.querySelector("figure.product__image");
 
+// mostra a imagem do produto selecionado
 if(PRODUCT_SELECTED_IMAGE instanceof HTMLElement) {
     const MY_URL = new URL(window.location.href);
 
@@ -27,6 +28,7 @@ if(PRODUCT_SELECTED_IMAGE instanceof HTMLElement) {
 
 const PRODUCT_SELECTED_TAG = document.querySelector("article.product__description");
 
+// mostra os botões de Voltar para produtos e Adicionar ao carrinho
 const BUTTON_BACK_TO_PREVIOUS_PAGE = document.createElement("a");
 BUTTON_BACK_TO_PREVIOUS_PAGE.classList.add("product__btn", "back");
 BUTTON_BACK_TO_PREVIOUS_PAGE.innerHTML = "Voltar para produtos";
@@ -46,6 +48,7 @@ if(PRODUCT_SELECTED_TAG instanceof HTMLElement) {
     const PRODUCT_ID = MY_URL.searchParams.get("id");
     console.log('ID', PRODUCT_ID);
 
+    // mostra as demais caraterísticas do produto selecionado
     if(typeof PRODUCT_ID === 'string') {
         const PRODUCT = PRODUCT_LIST_ORDERED[PRODUCT_ID];
         console.log('PRODUCT', PRODUCT);
@@ -120,6 +123,7 @@ if(PRODUCT_SELECTED_TAG instanceof HTMLElement) {
     }
 }
 
+// adiciona a classe aos botões
 function productSelectedMakeSpanQuantity() {
     const SPAN = document.createElement("span");
     SPAN.classList.add("cart__buttons__quantity");
@@ -142,6 +146,7 @@ function productSelectedMakeCartButton(buttonClass = "", iconClass = "", buttonC
     return BUTTON;
 }
 
+// mostra a quantidade de produtos após clicar no botão de menos
 function productSelectedMakeSubtractButton(span) {
     if(span instanceof HTMLElement === false) {
         throw new Error("É necessário uma tag html");
@@ -156,6 +161,7 @@ function productSelectedMakeSubtractButton(span) {
     });
 }
 
+// mostra a quantidade de produtos após clicar no botão de mais
 function productSelectedMakeAdditionButton(span) {
     if(span instanceof HTMLElement === false) {
         throw new Error("É necessário uma tag html");

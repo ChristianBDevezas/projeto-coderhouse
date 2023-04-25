@@ -7,8 +7,6 @@ galleryLinks.forEach((link) => {
 
         galleryFilter.querySelector(".active").classList.remove("active");
         link.classList.add("active");
-
-        // const filter = link.getAttribute("data-filter");
     });
 });
 
@@ -18,6 +16,7 @@ const DIV_GALLERY = document.querySelector("div.products__gallery");
 
 const PRODUCTS_FILTERED = {};
 
+// carrega os produtos dinamicamente na página
 if(DIV_GALLERY instanceof HTMLElement) {
     // DIV_GALLERY.insertAdjacentHTML("beforeend", "<hr/><hr/>");
     
@@ -58,6 +57,7 @@ if(DIV_GALLERY instanceof HTMLElement) {
 
 const LINKS_SIDEBAR = document.querySelectorAll("aside.products__categories ul.products__categories__links a[data-filter]");
 
+// filtra os produtos a serem apresentados por meio do menu de Categorias
 LINKS_SIDEBAR.forEach(link => {
     link.addEventListener("click", (event) => {
         event.preventDefault();
