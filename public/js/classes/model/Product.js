@@ -10,26 +10,9 @@ class Product {
   // get priceText() { return `${this.price}`.replace(".",","); }
   get priceText() { return 'R$ '+this.price.toLocaleString("pt-br", { minimumFractionDigits: 2});}
   // get alcoholText() { return (""+this.alcohol).replace(".",","); }
-  get alcoholText() { return this.alcohol.toLocaleString("pt-br", { minimumFractionDigits: 2}) + '%';}
-
-  // constructor(name, price, type, year, alcohol) {
-  constructor() {
-      // this.name = name;
-      // this.price = price;
-      // this.type = type;
-      // this.year = year;
-      // this.alcohol = alcohol;
-      // this.image = image;
-  }
-
-  convertType() {
-      let change = this.price.replace(',', '.');
-      this.price = Number(change);
-      console.log(`Preço do vinho ${this.name} é ${this.price}`);
-  }
-
+  get alcoholText() { return this.alcohol.toLocaleString("pt-br", { minimumFractionDigits: 2}) + '%';}  
+  
   static dataToModel(data) {
-    // {nome:"Barone Montalto", preco: 77.80, tipo: "tinto",ano: 2021, percentualAlcolico: 12.50}
     const MODEL = new Product();
     MODEL.id = data.id || -1;
     MODEL.name = data.name || "Produto sem nome";
