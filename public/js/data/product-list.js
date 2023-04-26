@@ -38,8 +38,8 @@ for(let item of PRODUCT_LIST_JSON) {
 }
 // console.log(PRODUCT_LIST);
 
-const PRODUCT_LIST_ORDERED = {};
-for(let item of PRODUCT_LIST_JSON) {
-  const PRODUCT = Product.dataToModel(item);
-  PRODUCT_LIST_ORDERED[PRODUCT.id] = PRODUCT;
-}
+// const PRODUCT_LIST_ORDERED = {};
+// for(let item of PRODUCT_LIST_JSON) {
+//   const PRODUCT = Product.dataToModel(item);
+//   PRODUCT_LIST_ORDERED[PRODUCT.id] = PRODUCT;
+// }
