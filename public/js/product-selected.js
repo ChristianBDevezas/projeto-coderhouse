@@ -14,16 +14,21 @@ const PRODUCT_SELECTED_IMAGE = document.querySelector("figure.product__image");
 
 // mostra a imagem do produto selecionado
 if(PRODUCT_SELECTED_IMAGE instanceof HTMLElement) {
-    const MY_URL = new URL(window.location.href);
+    getDataOrderedFromJson()
+        .then(productList => {
+        
+            const MY_URL = new URL(window.location.href);
 
-    const ID = MY_URL.searchParams.get("id");
+            const ID = MY_URL.searchParams.get("id");
 
-    if(typeof ID === 'string') {
-        const PRODUCT = PRODUCT_LIST_ORDERED[ID];
-        PRODUCT_SELECTED_IMAGE.innerHTML = `<img src="${DIRECTORY_PATH}${PRODUCT.image}" alt="Vinho">`;
-    }
+            if(typeof ID === 'string') {
+                const PRODUCT = productList[ID];
+                PRODUCT_SELECTED_IMAGE.innerHTML = `<img src="${DIRECTORY_PATH}${PRODUCT.image}" alt="Vinho">`;
+            }
 
-    setLastProductSelectedInStorage(ID);
+            setLastProductSelectedInStorage(ID);
+        
+        });
 }
 
 const PRODUCT_SELECTED_TAG = document.querySelector("article.product__description");
@@ -50,76 +55,79 @@ if(PRODUCT_SELECTED_TAG instanceof HTMLElement) {
 
     // mostra as demais caraterísticas do produto selecionado
     if(typeof PRODUCT_ID === 'string') {
-        const PRODUCT = PRODUCT_LIST_ORDERED[PRODUCT_ID];
-        console.log('PRODUCT', PRODUCT);
+        getDataOrderedFromJson()
+        .then(productList => {
+            const PRODUCT = productList[PRODUCT_ID];
+            console.log('PRODUCT', PRODUCT);
 
-        PRODUCT_SELECTED_TAG.innerHTML = `
-            <h2 class="product__title">
-                <span class="product__title__value">${PRODUCT.name}</span>
-            </h2>
+            PRODUCT_SELECTED_TAG.innerHTML = `
+                <h2 class="product__title">
+                    <span class="product__title__value">${PRODUCT.name}</span>
+                </h2>
 
-            <h2 class="product__price">Preço:
-                <span class="product__price__value">${PRODUCT.priceText}</span>
-            </h2>
+                <h2 class="product__price">Preço:
+                    <span class="product__price__value">${PRODUCT.priceText}</span>
+                </h2>
 
-            <h2 class="product__type">Tipo de Vinho:
-                <span class="product__type__value">${PRODUCT.type}</span>
-            </h2>
-                
-            <h2 class="product__vintage">Ano Safra:
-                <span class="product__vintage__value">${PRODUCT.year}</span>
-            </h2>
+                <h2 class="product__type">Tipo de Vinho:
+                    <span class="product__type__value">${PRODUCT.type}</span>
+                </h2>
+                    
+                <h2 class="product__vintage">Ano Safra:
+                    <span class="product__vintage__value">${PRODUCT.year}</span>
+                </h2>
 
-            <h2 class="product__alcohol">Percentual Alcoólico:
-                <span class="product__alcohol__value">${PRODUCT.alcoholText}</span>
-            </h2>`;
+                <h2 class="product__alcohol">Percentual Alcoólico:
+                    <span class="product__alcohol__value">${PRODUCT.alcoholText}</span>
+                </h2>`;
 
-        const ARTICLE_CART_BUTTONS = document.createElement('article');
-        ARTICLE_CART_BUTTONS.classList.add("cart__buttons");
-        // beforebegin    afterbegin      beforeend     afterend
-        //            <h1>                         </h1>
-        // PRODUCT_SELECTED_TAG.insertAdjacentElement("afterend", ARTICLE_CART_BUTTONS);
-        PRODUCT_SELECTED_TAG.insertAdjacentElement("beforeend", ARTICLE_CART_BUTTONS);
-        
-        const SPAN_QUANTITY_TAG = productSelectedMakeSpanQuantity();
-
-        ARTICLE_CART_BUTTONS.appendChild(productSelectedMakeSubtractButton(SPAN_QUANTITY_TAG));
-
-        ARTICLE_CART_BUTTONS.appendChild(SPAN_QUANTITY_TAG);
-
-        ARTICLE_CART_BUTTONS.appendChild(productSelectedMakeAdditionButton(SPAN_QUANTITY_TAG));
-
-        BUTTON_ADD_TO_CART.addEventListener("click", function(event) {
-            event.preventDefault();
-
-            if(SPAN_QUANTITY_TAG.quantity == 0) {
-                swal({
-                  title: 'Quantidade',
-                  text: 'Precisa adicionar ao menos 1 unidade!',
-                  icon: 'warning',
-                  // confirmButtonText: 'OK'
-                  //switched to "button" because "confirmButtonText" has been deprecated
-                  button: 'OK'
-                });
-            }
-            else {
-                let productQuantity = SPAN_QUANTITY_TAG.quantity;
+            const ARTICLE_CART_BUTTONS = document.createElement('article');
+            ARTICLE_CART_BUTTONS.classList.add("cart__buttons");
+            // beforebegin    afterbegin      beforeend     afterend
+            //            <h1>                         </h1>
+            // PRODUCT_SELECTED_TAG.insertAdjacentElement("afterend", ARTICLE_CART_BUTTONS);
+            PRODUCT_SELECTED_TAG.insertAdjacentElement("beforeend", ARTICLE_CART_BUTTONS);
             
-                if(isNaN(productQuantity) === false) {
-                    setShopItemInCart(PRODUCT_ID, productQuantity);
+            const SPAN_QUANTITY_TAG = productSelectedMakeSpanQuantity();
+
+            ARTICLE_CART_BUTTONS.appendChild(productSelectedMakeSubtractButton(SPAN_QUANTITY_TAG));
+
+            ARTICLE_CART_BUTTONS.appendChild(SPAN_QUANTITY_TAG);
+
+            ARTICLE_CART_BUTTONS.appendChild(productSelectedMakeAdditionButton(SPAN_QUANTITY_TAG));
+
+            BUTTON_ADD_TO_CART.addEventListener("click", function(event) {
+                event.preventDefault();
+
+                if(SPAN_QUANTITY_TAG.quantity == 0) {
+                    swal({
+                    title: 'Quantidade',
+                    text: 'Precisa adicionar ao menos 1 unidade!',
+                    icon: 'warning',
+                    // confirmButtonText: 'OK'
+                    //switched to "button" because "confirmButtonText" has been deprecated
+                    button: 'OK'
+                    });
+                }
+                else {
+                    let productQuantity = SPAN_QUANTITY_TAG.quantity;
+                
+                    if(isNaN(productQuantity) === false) {
+                        setShopItemInCart(PRODUCT_ID, productQuantity);
+                    }
+
+                    window.location = `cart.html`;
                 }
 
-                window.location = `cart.html`;
-            }
+                // let productQuantity = SPAN_QUANTITY_TAG.quantity;
+                
+                // if(isNaN(productQuantity) === false) {
+                //     setShopItemInCart(PRODUCT_ID, productQuantity);
+                // }
 
-            // let productQuantity = SPAN_QUANTITY_TAG.quantity;
-            
-            // if(isNaN(productQuantity) === false) {
-            //     setShopItemInCart(PRODUCT_ID, productQuantity);
-            // }
-
-            // window.location = `cart.html`;
-        });        
+                // window.location = `cart.html`;
+            });    
+        });    
     }
 }
 
@@ -133,6 +141,7 @@ function productSelectedMakeSpanQuantity() {
     return SPAN;
 }
 
+// adiciona a classe aos ícones
 function productSelectedMakeCartButton(buttonClass = "", iconClass = "", buttonClickEvent = (e) => {}) {
     // buttonClass = buttonClass || '';
     

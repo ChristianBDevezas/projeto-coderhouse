@@ -20,39 +20,44 @@ const PRODUCTS_FILTERED = {};
 if(DIV_GALLERY instanceof HTMLElement) {
     // DIV_GALLERY.insertAdjacentHTML("beforeend", "<hr/><hr/>");
     
-    for(let product of PRODUCT_LIST) {
-        if(PRODUCTS_FILTERED[product.type] instanceof Array === false) {
-            PRODUCTS_FILTERED[product.type] = [];
-        }
+    getDataFromJson()
+        .then(productList => {
+            for(let product of productList) {
+                if(PRODUCTS_FILTERED[product.type] instanceof Array === false) {
+                    PRODUCTS_FILTERED[product.type] = [];
+                }
+                
+                const IMAGE_PATH = `${DIRECTORY_PATH}${product.image}`;
+                
+                let tagArticle = document.createElement("article");
+                tagArticle.classList.add("products__item");
+                tagArticle.setAttribute("data-filter", product.type);
         
-        const IMAGE_PATH = `${DIRECTORY_PATH}${product.image}`;
+                tagArticle.innerHTML = `
+                    <header>
+                        <figure class="products__item__image">
+                            <img src="${IMAGE_PATH}" alt="Vinho ${product.type}">
+                        </figure>
         
-        let tagArticle = document.createElement("article");
-        tagArticle.classList.add("products__item");
-        tagArticle.setAttribute("data-filter", product.type);
-
-        tagArticle.innerHTML = `
-            <header>
-                <figure class="products__item__image">
-                    <img src="${IMAGE_PATH}" alt="Vinho ${product.type}">
-                </figure>
-
-                <a href="product-selected.html?id=${product.id}">
-                    <button class="products__item__buy">Comprar</button>
-                </a>
-            </header>
-
-            <footer>
-                    <span class="products__item__name">${product.name}</span>
-                    <span class="products__item__size">${product.priceText}</span>
-            </footer>`;
-
-            
-        PRODUCTS_FILTERED[product.type].push(tagArticle);
-
-        // DIV_GALLERY.insertAdjacentHTML("afterbegin", html);
-        DIV_GALLERY.insertAdjacentElement("beforeend", tagArticle);
-    }
+                        <a href="product-selected.html?id=${product.id}">
+                            <button class="products__item__buy">Comprar</button>
+                        </a>
+                    </header>
+        
+                    <footer>
+                            <span class="products__item__name">${product.name}</span>
+                            <span class="products__item__size">${product.priceText}</span>
+                    </footer>`;
+        
+                    
+                PRODUCTS_FILTERED[product.type].push(tagArticle);
+        
+                // DIV_GALLERY.insertAdjacentHTML("afterbegin", html);
+                DIV_GALLERY.insertAdjacentElement("beforeend", tagArticle);
+            }
+        })
+        // .catch(console.error);
+        .catch(error => console.error(error));    
 }
 
 const LINKS_SIDEBAR = document.querySelectorAll("aside.products__categories ul.products__categories__links a[data-filter]");

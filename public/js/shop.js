@@ -5,15 +5,11 @@ const SHOP_RESUME_TAG = document.querySelector("section.cart .cart__resume");
 const PRODUCT_LIST_TAG = document.querySelector("section.cart .cart_product_list");
 
 // recebe o valor total de compras atualizado para controlar a mensagem final
-let totalShopAmount = `${getTotalValueFromCart(true)}`;
+// let totalShopAmount = `${getTotalValueFromCart(true)}`;
+let totalShopAmount;
 console.log(totalShopAmount);
 
-// armazena o valor total de compras no LocalStorage
-// localStorage.setItem('TotalShopValue', totalShopAmount);
-// let totalShopAmountStorage = localStorage.getItem('TotalShopValue');
-// console.log(totalShopAmountStorage);
-
-// insere botões dinamicamente na página
+// insere os botões "Voltar para Produto" e "Finalizar a compra" dinamicamente na página
 if(SHOP_RESUME_TAG instanceof HTMLElement) {
     const BUTTON_BACK = document.createElement("a");
     SHOP_RESUME_TAG.insertAdjacentElement("beforeend", BUTTON_BACK);
@@ -42,14 +38,27 @@ if(SHOP_RESUME_TAG instanceof HTMLElement) {
     });
     
     BUTTON_END_SHOP.addEventListener("click", () => {
-        // compara o valor total de compras para mostrar a mensagem final
-        if(totalShopAmount.replace(',', '.') > 10) {
+        // compara o total de itens selecionados para mostrar a mensagem final
+        let cartItems = getShopCartItems();        
+        let totalItems = 0;
+
+        for(let id in cartItems) {
+            let product = cartItems[id]; // 1: 10
+            
+            totalItems += product;
+
+            if(totalItems > 0) break;
+        }
+        
+        if(totalItems > 0) {
             CART_MODAL.classList.add("show-modal");
 
             setTimeout(() => {
                 CART_MODAL.classList.remove("show-modal");
             }, 3500);
 
+            clearCartItems();
+            
             setTimeout(() => {
                 BUTTON_END_SHOP.setAttribute("href", "index.html");
                 window.location = `index.html`;
@@ -60,8 +69,6 @@ if(SHOP_RESUME_TAG instanceof HTMLElement) {
                 title: 'Quantidade',
                 text: 'Precisa adicionar ao menos 1 unidade!',
                 icon: 'warning',
-                // confirmButtonText: 'OK'
-                //switched to "button" because "confirmButtonText" has been deprecated
                 button: 'OK'
               });
         }
@@ -70,9 +77,13 @@ if(SHOP_RESUME_TAG instanceof HTMLElement) {
 
 const CART_TOTAL_VALUE_TAG = document.createElement("div");
 
+// recebe os dados do arquivo JSON
 if(SHOP_RESUME_TAG instanceof HTMLElement) {
-    CART_TOTAL_VALUE_TAG.innerHTML = getTotalValueFromCart(true);
-    SHOP_RESUME_TAG.insertAdjacentElement('afterbegin', CART_TOTAL_VALUE_TAG);
+    getDataOrderedFromJson()
+        .then(productList => {
+            CART_TOTAL_VALUE_TAG.innerHTML = getTotalValueFromCart(true, productList);
+            SHOP_RESUME_TAG.insertAdjacentElement('afterbegin', CART_TOTAL_VALUE_TAG);
+        });
 }
 
 shopMakeListFromCart(PRODUCT_LIST_TAG, CART_TOTAL_VALUE_TAG);
@@ -80,64 +91,88 @@ shopMakeListFromCart(PRODUCT_LIST_TAG, CART_TOTAL_VALUE_TAG);
 // mostra as características do produto selecionado
 function shopMakeListFromCart(container, cartTotalValueTag) {
     const SHOP_CART_ITEMS = getShopCartItems();
-
-    cartTotalValueTag.innerHTML = ``;
-
-    if(container instanceof HTMLElement) {
-        for(let PRODUCT_ID in SHOP_CART_ITEMS) {
-            const PRODUCT = PRODUCT_LIST_ORDERED[PRODUCT_ID];
-            const PRODUCT_QUANTITY = SHOP_CART_ITEMS[PRODUCT_ID];
     
-            // if(PRODUCT_QUANTITY <= 0) continue;
-            if(PRODUCT_QUANTITY < 1) continue;    
-    
-            console.log("PRODUCT", PRODUCT);
-            const ARTICLE_PRODUCT_TAG = document.createElement("article");
-            container.insertAdjacentElement("beforebegin", ARTICLE_PRODUCT_TAG);
-    
-            ARTICLE_PRODUCT_TAG.classList.add("cart__description");
-            ARTICLE_PRODUCT_TAG.innerHTML = `
-                <figure class="cart__description__image">
-                    <img src="${DIRECTORY_IMAGE_PATH}${PRODUCT.image}" alt="${PRODUCT.type}">
-                </figure>`;
+    getDataOrderedFromJson()
+        .then(productList => {
+            if(container instanceof HTMLElement) {
+                for(let PRODUCT_ID in SHOP_CART_ITEMS) {
+                    const PRODUCT = productList[PRODUCT_ID];
+                    const PRODUCT_QUANTITY = SHOP_CART_ITEMS[PRODUCT_ID];
             
-            const DIV_PRODUCT_DETAILS_TAG = document.createElement("div");
-            ARTICLE_PRODUCT_TAG.appendChild(DIV_PRODUCT_DETAILS_TAG); 
-    
-            DIV_PRODUCT_DETAILS_TAG.classList.add("cart__description__text");
-            DIV_PRODUCT_DETAILS_TAG.innerHTML = `
-                <h2 class="cart__subtitle">${PRODUCT.name}</h2>
-                <h2 class="cart__price">Preço: 
-                    <span class="product__price__item">${PRODUCT.priceText}</span>
-                </h2>
-                <h2 class="cart__delivery">Entrega:
-                    <span class="cart__delivery__days">3 a 5 dias úteis</span>
-                </h2>
-                <h2 class="cart__delivery">Valor do frete:
-                    <span class="cart__delivery__value">Grátis</span>
-                </h2>`;                
+                    // if(PRODUCT_QUANTITY <= 0) continue;
+                    if(PRODUCT_QUANTITY < 1) continue;    
             
-            const PRODUCT_TOTAL_PRICE_TAG = document.createElement("h2");
-            DIV_PRODUCT_DETAILS_TAG.appendChild(PRODUCT_TOTAL_PRICE_TAG);
-    
-            PRODUCT_TOTAL_PRICE_TAG.classList.add("cart__price");
-            PRODUCT_TOTAL_PRICE_TAG.innerHTML = `Valor unitário: <span class="cart__price_total">${(PRODUCT.price * PRODUCT_QUANTITY).toLocaleString('pt-br', {minimumFractionDigits: 2})}</span>`;
+                    console.log("PRODUCT", PRODUCT);
+                    const ARTICLE_PRODUCT_TAG = document.createElement("article");
+                    container.insertAdjacentElement("beforebegin", ARTICLE_PRODUCT_TAG);
             
-            const PRODUCT_BUTTONS_TAG = document.createElement("div");
-            PRODUCT_BUTTONS_TAG.classList.add("buttons-cart2");
-            // ARTICLE_PRODUCT_TAG.appendChild(PRODUCT_BUTTONS_TAG);
-            ARTICLE_PRODUCT_TAG.insertAdjacentElement("afterend", PRODUCT_BUTTONS_TAG);
-    
-            console.log('PRODUCT_QUANTITY', PRODUCT_ID, PRODUCT_QUANTITY);
-            const SPAN_QUANTITY_TAG = productSelectedMakeSpanQuantity(PRODUCT_QUANTITY);
+                    ARTICLE_PRODUCT_TAG.classList.add("cart__description");
+                    ARTICLE_PRODUCT_TAG.innerHTML = `
+                        <figure class="cart__description__image">
+                            <img src="${DIRECTORY_IMAGE_PATH}${PRODUCT.image}" alt="${PRODUCT.type}">
+                        </figure>`;
+                    
+                    const DIV_PRODUCT_DETAILS_TAG = document.createElement("div");
+                    ARTICLE_PRODUCT_TAG.appendChild(DIV_PRODUCT_DETAILS_TAG); 
+            
+                    DIV_PRODUCT_DETAILS_TAG.classList.add("cart__description__text");
+                    DIV_PRODUCT_DETAILS_TAG.innerHTML = `
+                        <h2 class="cart__subtitle">${PRODUCT.name}</h2>
+                        <h2 class="cart__price">Preço: 
+                            <span class="product__price__item">${PRODUCT.priceText}</span>
+                        </h2>
+                        <h2 class="cart__delivery">Entrega:
+                            <span class="cart__delivery__days">3 a 5 dias úteis</span>
+                        </h2>
+                        <h2 class="cart__delivery">Valor do frete:
+                            <span class="cart__delivery__value">Grátis</span>
+                        </h2>`;                
+                    
+                    const PRODUCT_TOTAL_PRICE_TAG = document.createElement("h2");
+                    DIV_PRODUCT_DETAILS_TAG.appendChild(PRODUCT_TOTAL_PRICE_TAG);
+            
+                    PRODUCT_TOTAL_PRICE_TAG.classList.add("cart__price");
+                    // PRODUCT_TOTAL_PRICE_TAG.innerHTML = `Valor unitário: <span class="cart__price_total">${(PRODUCT.price * PRODUCT_QUANTITY).toLocaleString('pt-br', {minimumFractionDigits: 2})}</span>`;
+                    
+                    updateProductTotalPriceTag(PRODUCT_TOTAL_PRICE_TAG, PRODUCT.price * PRODUCT_QUANTITY);
+                    
+                    const PRODUCT_BUTTONS_TAG = document.createElement("div");
+                    PRODUCT_BUTTONS_TAG.classList.add("buttons-cart2");
+                    // ARTICLE_PRODUCT_TAG.appendChild(PRODUCT_BUTTONS_TAG);
+                    ARTICLE_PRODUCT_TAG.insertAdjacentElement("afterend", PRODUCT_BUTTONS_TAG);
+            
+                    console.log('PRODUCT_QUANTITY', PRODUCT_ID, PRODUCT_QUANTITY);
+                    const SPAN_QUANTITY_TAG = productSelectedMakeSpanQuantity(PRODUCT_QUANTITY);
 
-            PRODUCT_BUTTONS_TAG.appendChild(productSelectedMakeSubtractButton(SPAN_QUANTITY_TAG, PRODUCT_ID, cartTotalValueTag));
-    
-            PRODUCT_BUTTONS_TAG.appendChild(SPAN_QUANTITY_TAG);
-    
-            PRODUCT_BUTTONS_TAG.appendChild(productSelectedMakeAdditionButton(SPAN_QUANTITY_TAG, PRODUCT_ID, cartTotalValueTag));
-        }
+                    totalShopAmount = getTotalValueFromCart(true, productList);
+
+                    PRODUCT_BUTTONS_TAG.appendChild(productSelectedMakeSubtractButton(SPAN_QUANTITY_TAG, PRODUCT_ID, cartTotalValueTag, totalShopAmount, PRODUCT_TOTAL_PRICE_TAG));
+            
+                    PRODUCT_BUTTONS_TAG.appendChild(SPAN_QUANTITY_TAG);
+            
+                    PRODUCT_BUTTONS_TAG.appendChild(productSelectedMakeAdditionButton(SPAN_QUANTITY_TAG, PRODUCT_ID, cartTotalValueTag, totalShopAmount, PRODUCT_TOTAL_PRICE_TAG));
+                }
+            }
+        });
+}
+
+// atualiza o valor unitário
+function updateProductTotalPriceTag(tag, value) {
+    tag.innerHTML = `Valor unitário: <span class="cart__price_total">${(value).toLocaleString('pt-br', {minimumFractionDigits: 2})}</span>`;
+}
+
+function updateShopTotalValueTag(tag, list) {
+    let total = 0;
+    let cartShopItems = getShopCartItems();
+
+    for(let id in cartShopItems) {
+        let quantity = cartShopItems[id];
+        console.log('total tag id', id, quantity, list[id]);
+        total += (quantity * list[id].price);
     }
+
+    console.log('total tag', tag, total, list, cartShopItems);
+    tag.innerHTML = `Valor total da compra: R$ ${total.toLocaleString('pt-br', { minimumFractionDigits: 2})}`;
 }
 
 // retorna a quantidade de produtos
@@ -150,7 +185,7 @@ function productSelectedMakeSpanQuantity(quantity = 0) {
     return SPAN;
 }
 
-// adiciona a classe e controla o evento dos botões
+// adiciona a classe e gera o evento dos botões
 function productSelectedMakeCartButton(buttonClass = "", iconClass = "", buttonClickEvent = (e) => {}) {
     // buttonClass = buttonClass || '';
     
@@ -165,48 +200,108 @@ function productSelectedMakeCartButton(buttonClass = "", iconClass = "", buttonC
 }
 
 // controla a quantidade de produtos subtraídos
-function productSelectedMakeSubtractButton(span, ID, cartTotalValueTag) {
+function productSelectedMakeSubtractButton(span, ID, cartTotalValueTag, totalShop, productTotalTag) {
     if(span instanceof HTMLElement === false) {
         throw new Error("É necessário uma tag html");
     }
 
     cartTotalValueTag.classList.add("total-value");
-    cartTotalValueTag.innerHTML = `Valor total da compra: R$ ${getTotalValueFromCart(true)}`;
+
+    getDataOrderedFromJson()
+        .then(productList => {
+            updateShopTotalValueTag(cartTotalValueTag, productList);
+        });
 
     return productSelectedMakeCartButton("cart__buttons__subtract", "fa-solid fa-minus fa-2x", () => {
         console.log("subtract");
         span.quantity--;
         span.quantity = span.quantity < 0 ? 0 : span.quantity;
-
         span.innerHTML = span.quantity;
 
         setShopItemInCart(ID, span.quantity);
+        
+        getDataOrderedFromJson()
+            .then(productList => {
+                cartTotalValueTag.innerHTML = `Valor total da compra: R$ ${getTotalValueFromCart(true, productList)}`;
+                
+                // armazena o valor total de compras atualizado para controlar a mensagem final
+                updateProductTotalPriceTag(productTotalTag, span.quantity * productList[ID].price);
 
-        cartTotalValueTag.innerHTML = `Valor total da compra: R$ ${getTotalValueFromCart(true)}`;
+                updateShopTotalValueTag(cartTotalValueTag, productList);
+            })
+            .catch(error => console.error(error));
+
+        // cartTotalValueTag.innerHTML = `Valor total da compra: R$ ${getTotalValueFromCart(true)}`;
+        // cartTotalValueTag.innerHTML = `Valor total da compra: R$ ${totalShop}`;
 
         // armazena o valor total de compras atualizado para controlar a mensagem final
-        totalShopAmount = `${getTotalValueFromCart(true)}`;
+        // totalShopAmount = `${getTotalValueFromCart(true)}`;
+        // totalShopAmount = `${totalShop}`;
         console.log(totalShopAmount);
     });
 }
 
 // controla a quantidade de produtos adicionados
-function productSelectedMakeAdditionButton(span, ID, cartTotalValueTag) {
+function productSelectedMakeAdditionButton(span, ID, cartTotalValueTag, totalShop, productTotalTag) {
     if(span instanceof HTMLElement === false) {
         throw new Error("É necessário uma tag html");
     }
 
-    return productSelectedMakeCartButton("cart__buttons__add", "fa-solid fa-plus fa-2x", () => {
-        console.log("adition");
-        // span.quantity++;
-        span.innerHTML = ++span.quantity;
-        
-        setShopItemInCart(ID, span.quantity);
+    cartTotalValueTag.classList.add("total-value");
+    // cartTotalValueTag.innerHTML = `Valor total da compra: R$ ${getTotalValueFromCart(true)}`;
+    // cartTotalValueTag.innerHTML = `Valor total da compra: R$ ${totalShop}`;
+    getDataOrderedFromJson()
+        .then(productList => {
+            updateShopTotalValueTag(cartTotalValueTag, productList);
+        });
 
-        cartTotalValueTag.innerHTML = `Valor total da compra: R$ ${getTotalValueFromCart(true)}`;
+    return productSelectedMakeCartButton("cart__buttons__subtract", "fa-solid fa-plus fa-2x", () => {
+        console.log("addition");        
+        span.innerHTML = ++span.quantity;
+
+        setShopItemInCart(ID, span.quantity);
+        
+        getDataOrderedFromJson()
+            .then(productList => {
+                cartTotalValueTag.innerHTML = `Valor total da compra: R$ ${getTotalValueFromCart(true, productList)}`;
+                
+                // armazena o valor total de compras atualizado para controlar a mensagem final
+                updateProductTotalPriceTag(productTotalTag, span.quantity * productList[ID].price);
+
+                updateShopTotalValueTag(cartTotalValueTag, productList);
+            })
+            .catch(error => console.error(error));
+
+        // cartTotalValueTag.innerHTML = `Valor total da compra: R$ ${getTotalValueFromCart(true)}`;
+        // cartTotalValueTag.innerHTML = `Valor total da compra: R$ ${totalShop}`;
 
         // armazena o valor total de compras atualizado para controlar a mensagem final
-        totalShopAmount = `${getTotalValueFromCart(true)}`;
+        // totalShopAmount = `${getTotalValueFromCart(true)}`;
+        // totalShopAmount = `${totalShop}`;
         console.log(totalShopAmount);
     });
 }
+
+// function productSelectedMakeAdditionButton(span, ID, cartTotalValueTag, totalShop, productTotalTag) {
+//     if(span instanceof HTMLElement === false) {
+//         throw new Error("É necessário uma tag html");
+//     }
+
+//     return productSelectedMakeCartButton("cart__buttons__add", "fa-solid fa-plus fa-2x", () => {
+//         console.log("adition");
+//         // span.quantity++;
+//         span.innerHTML = ++span.quantity;
+        
+//         setShopItemInCart(ID, span.quantity);
+
+//         getDataOrderedFromJson()
+//             .then(productList => {
+//                 cartTotalValueTag.innerHTML = `Valor total da compra: R$ ${getTotalValueFromCart(true, productList)}`;
+                
+//                 // armazena o valor total de compras atualizado para controlar a mensagem final
+//                 totalShopAmount = `${getTotalValueFromCart(true, productList)}`;
+//                 console.log(totalShopAmount);
+//             })
+//             .catch(error => console.error(error));
+//     });
+// }
