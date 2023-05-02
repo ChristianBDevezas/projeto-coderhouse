@@ -10,8 +10,7 @@ galleryLinks.forEach((link) => {
     });
 });
 
-// const DIRECTORY_PATH = `${window.location.protocol}//${window.location.hostname}/projeto-coderhouse-main-2023-04-12_3/public/img/`;
-const DIRECTORY_PATH = `public/img/`;
+
 const DIV_GALLERY = document.querySelector("div.products__gallery");
 
 const PRODUCTS_FILTERED = {};
@@ -27,7 +26,7 @@ if(DIV_GALLERY instanceof HTMLElement) {
                     PRODUCTS_FILTERED[product.type] = [];
                 }
                 
-                const IMAGE_PATH = `${DIRECTORY_PATH}${product.image}`;
+                const IMAGE_PATH = `${getImageDirectoryPath(product.image)}`;
                 
                 let tagArticle = document.createElement("article");
                 tagArticle.classList.add("products__item");

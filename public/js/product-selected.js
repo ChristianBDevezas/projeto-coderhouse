@@ -1,15 +1,5 @@
-const promoBtn = document.getElementById("promo-btn");
-promoBtn.addEventListener("click", () => {
-    setTimeout(() => {
-        Toastify({
-            text:"A cada 4 unidades deste vinho, uma é grátis! Frete gratuito!",
-            duration: 3200,
-        }).showToast();
-    }, 120);
-});
+configurePromotionButton("promo-btn");
 
-// const DIRECTORY_PATH = `${window.location.protocol}//${window.location.hostname}/projeto-coderhouse-main-2023-04-12_3/public/img/`;
-const DIRECTORY_PATH = `public/img/`;
 const PRODUCT_SELECTED_IMAGE = document.querySelector("figure.product__image");
 
 // mostra a imagem do produto selecionado
@@ -23,42 +13,39 @@ if(PRODUCT_SELECTED_IMAGE instanceof HTMLElement) {
 
             if(typeof ID === 'string') {
                 const PRODUCT = productList[ID];
-                PRODUCT_SELECTED_IMAGE.innerHTML = `<img src="${DIRECTORY_PATH}${PRODUCT.image}" alt="Vinho">`;
+                PRODUCT_SELECTED_IMAGE.innerHTML = `<img src="${getImageDirectoryPath(PRODUCT.image)}" alt="Vinho">`;
             }
 
-            setLastProductSelectedInStorage(ID);
-        
+            setLastProductSelectedInStorage(ID);        
         });
 }
 
 const PRODUCT_SELECTED_TAG = document.querySelector("article.product__description");
 
 // mostra os botões de Voltar para produtos e Adicionar ao carrinho
-const BUTTON_BACK_TO_PREVIOUS_PAGE = document.createElement("a");
-BUTTON_BACK_TO_PREVIOUS_PAGE.classList.add("product__btn", "back");
-BUTTON_BACK_TO_PREVIOUS_PAGE.innerHTML = "Voltar para produtos";
-BUTTON_BACK_TO_PREVIOUS_PAGE.setAttribute("href", "products.html");
-
-const BUTTON_ADD_TO_CART = document.createElement("a");
-BUTTON_ADD_TO_CART.classList.add("product__btn", "cart");
-BUTTON_ADD_TO_CART.innerHTML = "Adicionar ao carrinho";
-BUTTON_ADD_TO_CART.setAttribute("href", "cart.html");
+const BUTTON_BACK_TO_PREVIOUS_PAGE = makeButtonBackToPreviousPage();
+const BUTTON_ADD_TO_CART = makeButtonAddToCart();
+const CART_TOTAL_VALUE_CONTAINER = document.createElement('div');
+CART_TOTAL_VALUE_CONTAINER.classList.add('cart_total');
 
 if(PRODUCT_SELECTED_TAG instanceof HTMLElement) {
     PRODUCT_SELECTED_TAG.insertAdjacentElement("afterend", BUTTON_ADD_TO_CART);
-    PRODUCT_SELECTED_TAG.insertAdjacentElement("afterend", BUTTON_BACK_TO_PREVIOUS_PAGE);   
+    PRODUCT_SELECTED_TAG.insertAdjacentElement("afterend", BUTTON_BACK_TO_PREVIOUS_PAGE);  
+    
+    BUTTON_BACK_TO_PREVIOUS_PAGE.insertAdjacentElement('beforebegin', CART_TOTAL_VALUE_CONTAINER);
 
     const MY_URL = new URL(window.location.href);
 
     const PRODUCT_ID = MY_URL.searchParams.get("id");
-    console.log('ID', PRODUCT_ID);
 
     // mostra as demais caraterísticas do produto selecionado
     if(typeof PRODUCT_ID === 'string') {
         getDataOrderedFromJson()
         .then(productList => {
             const PRODUCT = productList[PRODUCT_ID];
-            console.log('PRODUCT', PRODUCT);
+            
+            console.log('PRODUCT', PRODUCT, PRODUCT.price);
+            updateProductTotalValue(CART_TOTAL_VALUE_CONTAINER, PRODUCT.price);
 
             PRODUCT_SELECTED_TAG.innerHTML = `
                 <h2 class="product__title">
@@ -83,6 +70,7 @@ if(PRODUCT_SELECTED_TAG instanceof HTMLElement) {
 
             const ARTICLE_CART_BUTTONS = document.createElement('article');
             ARTICLE_CART_BUTTONS.classList.add("cart__buttons");
+
             // beforebegin    afterbegin      beforeend     afterend
             //            <h1>                         </h1>
             // PRODUCT_SELECTED_TAG.insertAdjacentElement("afterend", ARTICLE_CART_BUTTONS);
@@ -90,11 +78,11 @@ if(PRODUCT_SELECTED_TAG instanceof HTMLElement) {
             
             const SPAN_QUANTITY_TAG = productSelectedMakeSpanQuantity();
 
-            ARTICLE_CART_BUTTONS.appendChild(productSelectedMakeSubtractButton(SPAN_QUANTITY_TAG));
+            ARTICLE_CART_BUTTONS.appendChild(productSelectedMakeSubtractButton(SPAN_QUANTITY_TAG, CART_TOTAL_VALUE_CONTAINER, PRODUCT.price));
 
             ARTICLE_CART_BUTTONS.appendChild(SPAN_QUANTITY_TAG);
 
-            ARTICLE_CART_BUTTONS.appendChild(productSelectedMakeAdditionButton(SPAN_QUANTITY_TAG));
+            ARTICLE_CART_BUTTONS.appendChild(productSelectedMakeAdditionButton(SPAN_QUANTITY_TAG, CART_TOTAL_VALUE_CONTAINER, PRODUCT.price));
 
             BUTTON_ADD_TO_CART.addEventListener("click", function(event) {
                 event.preventDefault();
@@ -131,13 +119,28 @@ if(PRODUCT_SELECTED_TAG instanceof HTMLElement) {
     }
 }
 
+function makeButtonAddToCart() {
+    const BUTTON_ADD_TO_CART = document.createElement("a");
+    BUTTON_ADD_TO_CART.classList.add("product__btn", "cart");
+    BUTTON_ADD_TO_CART.innerHTML = "Adicionar ao carrinho";
+    BUTTON_ADD_TO_CART.setAttribute("href", "cart.html");
+    return BUTTON_ADD_TO_CART;
+}
+
+function makeButtonBackToPreviousPage() {
+    const BUTTON_BACK_TO_PREVIOUS_PAGE = document.createElement("a");
+    BUTTON_BACK_TO_PREVIOUS_PAGE.classList.add("product__btn", "back");
+    BUTTON_BACK_TO_PREVIOUS_PAGE.innerHTML = "Voltar para produtos";
+    BUTTON_BACK_TO_PREVIOUS_PAGE.setAttribute("href", "products.html");
+    return BUTTON_BACK_TO_PREVIOUS_PAGE;
+}
+
 // adiciona a classe aos botões
 function productSelectedMakeSpanQuantity() {
     const SPAN = document.createElement("span");
     SPAN.classList.add("cart__buttons__quantity");
     SPAN.quantity = 1;
     SPAN.innerHTML = SPAN.quantity;
-
     return SPAN;
 }
 
@@ -156,7 +159,7 @@ function productSelectedMakeCartButton(buttonClass = "", iconClass = "", buttonC
 }
 
 // mostra a quantidade de produtos após clicar no botão de menos
-function productSelectedMakeSubtractButton(span) {
+function productSelectedMakeSubtractButton(span, totalContainerTag, productPrice) {
     if(span instanceof HTMLElement === false) {
         throw new Error("É necessário uma tag html");
     }
@@ -165,13 +168,14 @@ function productSelectedMakeSubtractButton(span) {
         console.log("subtract");
         span.quantity--;
         span.quantity = span.quantity < 0 ? 0 : span.quantity;
-
         span.innerHTML = span.quantity;
+        
+        updateProductTotalValue(totalContainerTag, span.quantity * productPrice);        
     });
 }
 
 // mostra a quantidade de produtos após clicar no botão de mais
-function productSelectedMakeAdditionButton(span) {
+function productSelectedMakeAdditionButton(span, totalContainerTag, productPrice) {
     if(span instanceof HTMLElement === false) {
         throw new Error("É necessário uma tag html");
     }
@@ -180,5 +184,12 @@ function productSelectedMakeAdditionButton(span) {
         console.log("adition");
         // span.quantity++;
         span.innerHTML = ++span.quantity;
+
+        updateProductTotalValue(totalContainerTag, span.quantity * productPrice);
     });
+}
+
+function updateProductTotalValue(tag, value) {
+    total = value.toLocaleString("pt-br", {minimumFractionDigits: 2})
+    tag.innerHTML = `<strong>Valor total:</strong><span>R$ ${total}</span>`;
 }

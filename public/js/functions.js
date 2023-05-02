@@ -4,6 +4,7 @@ const FLAG_PRODUCT_SELECTED = "lastProductSelected";
 startShopCartItems();
 function startShopCartItems() {  
   console.log(localStorage.getItem(FLAG_CART_ITEMS), localStorage.getItem(FLAG_CART_ITEMS) === null);
+  
   if(localStorage.getItem(FLAG_CART_ITEMS) === null) {
     localStorage.setItem(FLAG_CART_ITEMS, '{}');
   }
@@ -68,10 +69,6 @@ function getTotalValueFromCart(asText = false, productListOrdered) {
   return cartTotal;
 }
 
-// function getTotalValueFromCartAsText() {
-//   return getTotalValueFromCart().toLocaleString("pt-br", {minimumFractionDigits: 2});
-// }
-
 function getDataFromJson() {
   return fetch(`public/js/data/data.json`, {
     method:"GET",
@@ -93,6 +90,7 @@ function getDataOrderedFromJson() {
   return getDataFromJson()
     .then(productList => {
       const PRODUCT_LIST_ORDERED = {};
+
       for(let item of PRODUCT_LIST_JSON) {
         const PRODUCT = Product.dataToModel(item);
         PRODUCT_LIST_ORDERED[PRODUCT.id] = PRODUCT;
@@ -100,4 +98,63 @@ function getDataOrderedFromJson() {
 
       return PRODUCT_LIST_ORDERED;
     });
+}
+
+async function getShopTotalValue() {
+  let total = 0;
+  
+  try {
+
+    let productOrderedList = await getDataOrderedFromJson()
+    let cartShopItems = getShopCartItems();
+    
+    for(let id in cartShopItems) {
+      let quantity = cartShopItems[id];
+      
+      total += (quantity * productOrderedList[id].price);
+    }
+
+    return total;
+  }
+  catch(error) {
+    // inserir esse no banco de dados: erros_da_loja_vinho
+    // analisar se deve aparecer alguma mensagem para usuário: popup
+    // 2 mensagens: uma para o usuário do programa, e outra para o desenvolvedor (código)
+    console.error(error);
+  }
+
+  return 0;
+}
+
+async function getShopTotalValueBrazilianText() {
+  let total = await getShopTotalValue()
+
+  return total.toLocaleString('pt-br', {
+    minimumFractionDigits: 2
+  });
+}
+
+configurePromotionButton("promo-btn");
+function configurePromotionButton(cssClass) {
+  const promoBtn = document.getElementById(cssClass);
+
+  promoBtn.addEventListener("click", () => {
+      setTimeout(() => {
+          Toastify({
+              text: "A cada 4 unidades deste vinho, uma é grátis! Frete gratuito!",
+              duration: 3200,
+          }).showToast();
+      }, 120);
+  });
+}
+
+function getImageDirectoryPath(imagePath = null) {
+  let newImagePath = "";
+
+  if(typeof imagePath === 'string') {
+    newImagePath += imagePath;
+  }
+
+  // return `${window.location.protocol}//${window.location.hostname}/projeto-coderhouse-main-2023-04-29_1/public/img/${newImagePath}`
+  return `public/img/${newImagePath}`;
 }

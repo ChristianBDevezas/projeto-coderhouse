@@ -1,6 +1,3 @@
-// const DIRECTORY_PATH = `${window.location.protocol}//${window.location.hostname}/projeto-coderhouse-main-2023-04-12_3/public/img/`;
-const DIRECTORY_IMAGE_PATH = `public/img/`;
-
 const SHOP_RESUME_TAG = document.querySelector("section.cart .cart__resume");
 const PRODUCT_LIST_TAG = document.querySelector("section.cart .cart_product_list");
 
@@ -94,6 +91,8 @@ function shopMakeListFromCart(container, cartTotalValueTag) {
     
     getDataOrderedFromJson()
         .then(productList => {
+            cartTotalValueTag.innerHTML = ``;
+            
             if(container instanceof HTMLElement) {
                 for(let PRODUCT_ID in SHOP_CART_ITEMS) {
                     const PRODUCT = productList[PRODUCT_ID];
@@ -109,7 +108,7 @@ function shopMakeListFromCart(container, cartTotalValueTag) {
                     ARTICLE_PRODUCT_TAG.classList.add("cart__description");
                     ARTICLE_PRODUCT_TAG.innerHTML = `
                         <figure class="cart__description__image">
-                            <img src="${DIRECTORY_IMAGE_PATH}${PRODUCT.image}" alt="${PRODUCT.type}">
+                            <img src="${getImageDirectoryPath(PRODUCT.image)}" alt="${PRODUCT.type}">
                         </figure>`;
                     
                     const DIV_PRODUCT_DETAILS_TAG = document.createElement("div");
@@ -118,12 +117,15 @@ function shopMakeListFromCart(container, cartTotalValueTag) {
                     DIV_PRODUCT_DETAILS_TAG.classList.add("cart__description__text");
                     DIV_PRODUCT_DETAILS_TAG.innerHTML = `
                         <h2 class="cart__subtitle">${PRODUCT.name}</h2>
+
                         <h2 class="cart__price">Preço: 
                             <span class="product__price__item">${PRODUCT.priceText}</span>
                         </h2>
+
                         <h2 class="cart__delivery">Entrega:
                             <span class="cart__delivery__days">3 a 5 dias úteis</span>
                         </h2>
+
                         <h2 class="cart__delivery">Valor do frete:
                             <span class="cart__delivery__value">Grátis</span>
                         </h2>`;                
@@ -161,6 +163,7 @@ function updateProductTotalPriceTag(tag, value) {
     tag.innerHTML = `Valor unitário: <span class="cart__price_total">${(value).toLocaleString('pt-br', {minimumFractionDigits: 2})}</span>`;
 }
 
+// atualiza o valor total
 function updateShopTotalValueTag(tag, list) {
     let total = 0;
     let cartShopItems = getShopCartItems();
@@ -281,27 +284,3 @@ function productSelectedMakeAdditionButton(span, ID, cartTotalValueTag, totalSho
         console.log(totalShopAmount);
     });
 }
-
-// function productSelectedMakeAdditionButton(span, ID, cartTotalValueTag, totalShop, productTotalTag) {
-//     if(span instanceof HTMLElement === false) {
-//         throw new Error("É necessário uma tag html");
-//     }
-
-//     return productSelectedMakeCartButton("cart__buttons__add", "fa-solid fa-plus fa-2x", () => {
-//         console.log("adition");
-//         // span.quantity++;
-//         span.innerHTML = ++span.quantity;
-        
-//         setShopItemInCart(ID, span.quantity);
-
-//         getDataOrderedFromJson()
-//             .then(productList => {
-//                 cartTotalValueTag.innerHTML = `Valor total da compra: R$ ${getTotalValueFromCart(true, productList)}`;
-                
-//                 // armazena o valor total de compras atualizado para controlar a mensagem final
-//                 totalShopAmount = `${getTotalValueFromCart(true, productList)}`;
-//                 console.log(totalShopAmount);
-//             })
-//             .catch(error => console.error(error));
-//     });
-// }
