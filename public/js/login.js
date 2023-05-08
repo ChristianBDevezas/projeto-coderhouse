@@ -99,12 +99,11 @@ form.addEventListener("submit", (e) => {
         getUserName();
         clearInputFields();
         checkState(userState);
+        redirectIfLogged();
 
         // garante que o nome de usuário e botão "sair" sejam mostrados após o usuário fazer novo login
         userName.style.display = 'block';
         userExit.style.display = 'block';
-
-        redirectIfLogged();
       }    
       else {
         swal({
@@ -127,7 +126,5 @@ form.addEventListener("submit", (e) => {
 });
 
 userExit.addEventListener("click", () => {
-  userState = false;
-  checkState(userState);
-  localStorage.clear();
+  deslogarDaLoja();
 });

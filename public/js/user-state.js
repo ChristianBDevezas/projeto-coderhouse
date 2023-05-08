@@ -28,8 +28,5 @@ const checkState = (userSate) => {
 }
 
 userExit.addEventListener("click", () => {
-  userSate = false;
-  localStorage.setItem('UserState', userSate);
-  checkState(userSate);
-  localStorage.clear();
+  deslogarDaLoja();
 });
