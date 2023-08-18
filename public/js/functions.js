@@ -171,7 +171,7 @@ function deslogarDaLoja() {
   localStorage.clear();
   console.log("cartItems", cartItems);
 
-  for (let id in cartItems) {
+  for(let id in cartItems) {
     setShopItemInCart(id, cartItems[id]);
   }
 }

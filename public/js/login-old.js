@@ -24,6 +24,7 @@ const getUserName = () => {
   let emailCapitalize = email.charAt(0).toUpperCase() + email.slice(1);
   let password = inputPassword.value;
   
+  // localStorage.setItem('Email', email);
   localStorage.setItem('Email', emailCapitalize);
   localStorage.setItem('Password', password);
 }
@@ -53,6 +54,11 @@ const checkIfLogged = () => {
 // Redireciona para a página de produtos após fazer o Login
 const redirectIfLogged = () => {
   if(checkIfLogged()) {  
+    // window.location.href="http://localhost/projeto-coderhouse-main/";
+    // const location = window.location;
+    // const folderDirectory = 'projeto-coderhouse';
+    // const destinationPage = `${location.protocol}/${location.hostname}/${folderDirectory}/products.html`;
+    // window.location.href = destinationPage;
     window.location.href = 'products.html';
   }
 }
@@ -65,8 +71,23 @@ const clearInputFields = () => {
 
 form.addEventListener("submit", (e) => {
   e.preventDefault();
+  // redirectIfLogged();
 
   // Informa que usuário já está logado
+  if(checkIfLogged()) {
+    //Biblioteca Sweet Alert
+    // swal({
+    //   title: 'Logoff',
+    //   text: 'Precisa fazer logoff primeiro!',
+    //   icon: 'error',
+    //   // confirmButtonText: 'OK'
+    //   //switched to "button" because "confirmButtonText" has been deprecated
+    //   button: 'OK'
+    // });
+
+    // clearInputFields();
+  }
+  else {
     const regExp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     //Confere se o e-mail é válido e se o campo de senha possui o mínimo de 6 caracteres
@@ -101,6 +122,7 @@ form.addEventListener("submit", (e) => {
         button: 'OK'
       });
     }
+  }
 });
 
 userExit.addEventListener("click", () => {
