@@ -106,7 +106,6 @@ async function getShopTotalValue() {
   let total = 0;
 
   try {
-
     let productOrderedList = await getDataOrderedFromJson()
     let cartShopItems = getShopCartItems();
 
@@ -135,7 +134,6 @@ async function getShopTotalValueBrazilianText() {
   });
 }
 
-
 function configurePromotionButton(cssClass) {
   const promoBtn = document.getElementById(cssClass);
 
@@ -163,7 +161,6 @@ function getImageDirectoryPath(imagePath = null) {
   // return `${window.location.protocol}//${window.location.hostname}/projeto-coderhouse-main-2023-04-29_1/public/img/${newImagePath}`
   return `public/img/${newImagePath}`;
 }
-
 
 function deslogarDaLoja() {
   userSate = false;
